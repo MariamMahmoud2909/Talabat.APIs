@@ -3,20 +3,28 @@ namespace Talabat.APIs
 {
 	public class Program
 	{
+		// Entry Point
 		public static void Main(string[] args)
 		{
-			var builder = WebApplication.CreateBuilder(args);
+			var webApplicationBuilder = WebApplication.CreateBuilder(args);
 
-			// Add services to the container.
+			#region Configure Services
+			// Add services to the Dependency Injection container.
 
-			builder.Services.AddControllers();
+			webApplicationBuilder.Services.AddControllers();
+			// Register the required web API services to the DI Container
+
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
+			webApplicationBuilder.Services.AddEndpointsApiExplorer();
+			webApplicationBuilder.Services.AddSwaggerGen();
+			// Register services required to document APIs [autp. using swagger]
 
-			var app = builder.Build();
+			#endregion
 
-			// Configure the HTTP request pipeline.
+			var app = webApplicationBuilder.Build(); // Web Application
+
+			#region Configure Kestrel Middlewares
+			// Configure the HTTP request pipeline. [Middleware]
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseSwagger();
@@ -29,6 +37,7 @@ namespace Talabat.APIs
 
 
 			app.MapControllers();
+			#endregion
 
 			app.Run();
 		}
